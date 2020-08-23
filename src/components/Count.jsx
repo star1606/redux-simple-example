@@ -2,33 +2,49 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import * as actions from "../actions/Count";
-
-const Count = () => {
+import * as inputActions from "../actions/Inputs";
+const Count = (props) => {
   const dispatch = useDispatch();
-  const [localCount, setLocalCount] = useState(0);
 
-  const { count: storeCount } = useSelector((state) => state.count);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  const { inputs: storeInputs } = useSelector((state) => state.inputs);
   useEffect(() => {
     console.log("Component did mount.");
   }, []);
 
-  const increaseCount = useCallback(() => {
-    setLocalCount(localCount + 1);
-    dispatch(actions.increaseCount());
-  }, [localCount, dispatch]);
+  const handleEmail = (e) => {
+    // [e.target.name] = setInputs(e.target.value);
+    setEmail(e.target.value);
+  };
 
-  const decreaseCount = useCallback(() => {
-    setLocalCount(localCount - 1);
-    dispatch(actions.decreaseCount());
-  }, [localCount, dispatch]);
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    let body = {
+      email: email,
+      password: password,
+    };
+    dispatch(inputActions.loginUser(body));
+    console.log(body);
+    console.log("storeInputs" + storeInputs);
+  };
 
   return (
     <div>
-      <div>{`localCount : ${localCount}`}</div>
-      <div>{`storeCount : ${storeCount}`}</div>
-      <div onClick={increaseCount}>{"+"}</div>
-      <div onClick={decreaseCount}>{"-"}</div>
+      <div>{`storeInputs : ${storeInputs}`}</div>
+      <div>dddddd{props.email}</div>
+
+      <form onSubmit={onSubmit}>
+        <input onChange={handleEmail} name="email" value={email} />
+        <input onChange={handlePassword} name="password" value={password} />
+        <button type="submit">클릭 </button>
+      </form>
     </div>
   );
 };

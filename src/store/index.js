@@ -1,7 +1,8 @@
 import { createStore } from "redux";
+// import inputReducer from "../reducers/Inputs";
 
-const create = (reducers) => {
-  return createStore(reducers);
+const create = (inputReducer) => {
+  return createStore(inputReducer);
 };
 
 export default create;
